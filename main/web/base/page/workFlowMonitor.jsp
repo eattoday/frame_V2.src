@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
+<%
+    String path = request.getContextPath();
+    String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
+    String rootProcessInstId = request.getParameter("rootProcessInstId");
+    String processInstID = request.getParameter("processInstID");
+    String jobID = request.getParameter("jobID");
+    String mode = request.getParameter("mode");
+    Boolean showAttachment = "INFINITE".equals(mode);
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="<%=path%>/component/jquery-treetable/css/jquery.treetable.css" type="text/css">
+    <link rel="stylesheet" href="<%=path%>/component/jquery-treetable/css/jquery.treetable.theme.default.css"
+          type="text/css">
+    <link rel="stylesheet" type="text/css" href="<%=path%>/component/layui-v1.0.9/css/layui.css"/>
+
+    <script type="text/javascript" src="<%=path%>/component/layui-v1.0.9/layui.js"></script>
+    <script type="text/javascript" src="<%=path%>/framework/js/common.js"></script>
+
+</head>
+<body>
+<ul id="workFlowul" class="nav nav-tabs" style="position:relative;z-index: 1;background-color:#fff;">
+    <li id="graph" role="presentation" class="active" style="background-color: #fff;"><a>流程图</a></li>
+    <li id="record" role="presentation" style="background-color: #fff;border-bottom: 1px solid #bbb;"><a>日志列表</a></li>
+</ul>
+<div class="view_panel" id="record_view" style="display: none;"></div>
+<div class="view_panel" id="graph_view" style="position:absolute;bottom:0;left:10px;right:10px;height:100%;">
+    <%--<iframe frameborder="0" width="100%" height="100%" src="<%=path%>/base/frame/workFlowView.jsp?processInstID=<%=rootProcessInstId%>" />--%>
+    <iframe frameborder="0" width="100%" height="99%"
+            src="<%=path%>/commGrapMonitor.do?rootProcessInstId=<%=rootProcessInstId%>&jobID=<%=jobID%>"/>
+</div>
+
+<script type="text/javascript" src="<%=path%>/component/jquery-treetable/jquery.treetable.js"></script>
+<script type="text/javascript">
+    //@ sourceURL=workFlowMonitor.jsp
+
+    $(document).ready(function () {
+//        layui.use(['layer'], function () {
+        __init_metar_tree_table({
+            loadUrl: '<%=path%>/commWorkFlowMonitorController.do?method=getOrderLog&processInstID=<%=processInstID%>&rootProcessInstId=<%=rootProcessInstId%>&jobID=<%=jobID%>',
+            container: 'record_view',
+            columns: [{
+                title: '处理人部门',
+                column: 'operateOrg'
+            }, {
+                title: '处理人',
+                column: 'operator',
+                width: 50,
+                overflowHidden: true,
+                wrapFunction: function (treeNode, value) {
+                    if (treeNode.nowActivity) {
+                        var actionContent = '';
+                        var actionParams = '';
+                        var personStrArray = value.split(',');
+                        for (var i = 0; i < personStrArray.length; i++) {
+                            var personStr = personStrArray[i];
+                            var personProArray = personStr.split('||');
+                            if (personProArray.length == 2) {
+                                actionContent += personProArray[0];
+                                actionParams += personProArray[1];
+                            }
+                            if (i != personStrArray.length - 1) {
+                                actionContent += ',';
+                                actionParams += ',';
+                            }
+                        }
+                        value = '<a id="' + new Date().getTime() + '" title="' + actionContent + '" onclick="__show_person_info(this.id , \'' + actionParams + '\');">' + actionContent + '</a>';
+                    }
+                    return value;
+                }
+            }, {
+                title: '处理环节',
+                column: 'activityName',
+                width: 100
+            }, {
+                title: '处理结果',
+                column: 'processType'
+            }, {
+                title: '环节说明',
+                column: 'processOpinion'
+            },
+//                    {
+//                    title: '下一环节',
+//                    column: 'activityName'
+//                },
+                {
+                    title: '后续处理人',
+                    column: 'nextCandidateUsers'
+                }, {
+                    title: '送达时间',
+                    column: 'arriveDateTime',
+                    width: 80
+                }, {
+                    title: '打开时间',
+                    column: 'openDateTime',
+                    width: 80
+                }, {
+                    title: '完成时间',
+                    column: 'completeDateTime',
+                    width: 80
+                }, {
+                    title: '操作IP地址',
+                    column: 'ipAddress',
+                    width: 70
+                },
+                <%if(showAttachment){ %>
+                , {
+                    title: '附件',
+                    column: 'attachment',
+                    width: 80,
+                    value: 'attachment',
+                    wrapFunction: function (treeNode, value) {
+                        setTimeout(function () {
+                            __init_attachment_function('__attachment_for_workflow_' + treeNode.id, treeNode.processingObjectId, treeNode.processingObjectTable, 'show', '', 'N');
+                        }, 500);
+                        return '<input id="__attachment_for_workflow_' + treeNode.id + '" type="file" style="display:none"/>';
+                    }
+                }
+                <%}%>
+            ]
+        });
+//        });
+
+
+        $('.nav li').click(function () {
+            var __this = $(this);
+            if (!__this.hasClass('active')) {
+                $('.nav li').removeClass('active');
+                __this.addClass('active');
+                $('.view_panel').hide();
+                $('#' + this.id + '_view').show();
+            }
+        });
+    })
+
+    function __show_person_info(action_id, person_usernames) {
+        var user_properties = ['trueName', 'orgName', 'mobilePhone', 'email'];
+        __open_metar_window(action_id, '当前处理人', 960, 460, function (window_body) {
+//        __show_metar_loading();
+            $.ajax({
+                url: _PATH + '/commWorkFlowMonitorController.do?method=getUserEntityByUserNames&userNames=' + person_usernames,
+                method: 'POST',
+                async: true,
+                dataType: 'json',
+                success: function (response) {
+                    if (response) {
+                        var __table = $('<table class="table"></table>');
+                        var __tbody = $('<tbody></tbody>');
+                        var __tr_title = $('<tr><th>姓名</th><th>单位</th><th>电话</th><th>邮箱</th></tr>');
+                        __tbody.append(__tr_title);
+                        for (var i = 0; i < response.length; i++) {
+                            var __tr = $('<tr></tr>');
+                            for (var j = 0; j < user_properties.length; j++) {
+                                if (response[i][user_properties[j]] == undefined) {
+                                    var __td = $('<td><span>' + "" + '</span></td>');
+                                } else {
+                                    var __td = $('<td><span>' + response[i][user_properties[j]] + '</span></td>');
+                                }
+//                                var __td = $('<td><span>' + response[i][user_properties[j]]==undefined?"":response[i][user_properties[j]] + '</span></td>');
+                                /*if(user_properties[j] == 'orgEntity'){
+                                 debugger;
+                                 __td = $('<td><span>' + response[i][user_properties[j]]['orgName'] + '</span></td>');
+                                 }*/
+                                __tr.append(__td);
+                            }
+                            __tbody.append(__tr);
+                        }
+                        __table.append(__tbody);
+                        $(window_body).append(__table);
+//                    __hide_metar_loading();
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+//                __hide_metar_loading();
+                }
+            })
+        });
+    }
+</script>
+</body>
+</html>

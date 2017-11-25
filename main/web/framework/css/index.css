@@ -1,0 +1,33 @@
+body { margin:0; }
+a:hover , a:focus{ outline:none;text-decoration:none; }
+
+.tooltip { position:absolute;z-index: 99;display:none;transition: all 300ms ease 0s; }
+.tooltip .tooltip-inner { line-height: 40px;background-color:#4e5463; }
+.tooltip.right .tooltip-arrow { border-right-color: #4e5463; }
+
+#header-container .uf-menu { line-height:45px;padding:0 20px;color:#fff; }
+#header-container .uf-menu:hover { cursor:pointer;background-color:#4e5463; }
+#header-container .fa { float:left;line-height:45px;margin-right:5px; }
+#header-container .first { display: none; }
+
+#header-container { position:absolute;z-index:99;background-color:#2b3643;width:100%;height:45px;}
+#left-menu-container { position:absolute;z-index:9;top:45px;bottom:0;width:150px;background-color:#2b3643;overflow:auto; }
+#content-container { position:absolute;top:45px;right:0;bottom:0;left:150px;overflow:auto; }
+/*#content-mask { position:absolute;width:100%;height:100%;background-color: #fff; }*/
+#btn-expand-collapse { text-align:center;color:#fff;background-color:#42485b;font-size: 16px;display:block;padding:3px; }
+#btn-expand-collapse:hover { background-color:#4e5463; }
+#left-menu-container .uf-nav { padding:0; }
+#left-menu-container .uf-nav-child { top:0;position:relative; }
+#left-menu-container .uf-nav-item { line-height: 45px;width:100%;position: relative; }
+#left-menu-container .uf-nav-item a { color:#fff;display: block;padding:0 20px;overflow:hidden;text-overflow: ellipsis;white-space: nowrap; }
+#left-menu-container .uf-nav-item a:hover { background-color:#4e5463; }
+#left-menu-nav { position:absolute;top:25px; bottom:0;width:100%; }
+.uf-nav-item .uf-nav { display:none;background-color:#42485b; }
+.uf-nav-item .active { background-color:#009688; }
+.menu-text { margin-left:12px; }
+#left-uf-nav-bar { background-color:#009688;position:absolute;display:block;width:3px;height:0;transition: all 300ms ease 0s; }
+#content-iframe { position:absolute;border:none;width:100%;height:100%;background-color:#eaedf1 }
+
+.left-menu-container { display: none; }
+
+.layui-layer-btn a { line-height: 26px;border-radius: 4px;height:auto;padding:4px 15px; }

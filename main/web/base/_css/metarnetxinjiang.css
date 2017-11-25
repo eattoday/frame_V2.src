@@ -1,0 +1,260 @@
+.table-edittask {
+    border: 0px solid #dddddd;;
+}
+
+.big-title-metar div{
+    color: #333333;
+}
+
+.table-edittask > tbody > tr > th {
+    line-height: 40px;
+    height: 40px;
+    width: 90px;
+    padding: 0 10px 0 30px !important;
+    /*padding: 0 !important;*/
+    color: #333333;
+    font-weight: bolder;
+    margin: 0 !important;
+    /*border-top: 0px solid #dddddd;*/
+    /*border-left: 0px solid #dddddd;*/
+    border: 0px solid #dddddd;
+    cursor:default !important;
+}
+
+.table-edittask > tbody > tr > td {
+    padding: 10px 30px 0px 0px !important;
+    border: 0px solid #dddddd;
+}
+
+.table-edittask th .Required {
+    color: #e97171;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.table-editfdbktask {
+    border: 1px solid #dddddd;;
+}
+
+.table-editfdbktask > tbody > tr > th {
+    line-height: 40px;
+    height: 40px;
+    width: 90px;
+    padding: 0 10px 0 30px !important;
+    /*padding: 0 !important;*/
+    color: #333333;
+    font-weight: bolder;
+    margin: 0 !important;
+    border-top: 1px solid #dddddd;
+    border-left: 1px solid #dddddd;
+    cursor:default !important;
+}
+
+.table-editfdbktask > tbody > tr > td {
+    padding: 10px 30px 0px 0px !important;
+    border-right: 1px solid #dddddd;
+}
+
+.table-editfdbktask th .Required {
+    color: #e97171;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td{
+    /*padding: 2px 5px!important;*/
+    height:20px;
+}
+
+.table-edit tr th b{
+    color: red;
+}
+
+input[readonly]{
+    background-color: #ffffff;
+    cursor: default !important;
+}
+table td input[type="text"] {
+    background-color: #ffffff;
+    font-size: 12px;
+}
+
+
+.table-edittask textarea{
+    font-size: 12px;
+}
+
+.form-control {
+    width: 100%;
+}
+
+.table-bordered {
+    border: 1px solid #dddddd;!important;
+    border-collapse: separate;
+    *border-collapse: collapse;
+    border-left: 1px solid #dddddd;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+.table-bordered th,
+.table-bordered td
+{
+    border-left: 1px solid #dddddd;!important;
+}
+.input-group {
+    display: inline-table;
+    vertical-align: middle;
+    width: 90%;
+}
+
+.input-group {
+    position: relative;
+    display: table;
+    border-collapse: separate;
+}
+.input-group .searchtext{
+    position: relative;
+    z-index: 2;
+    float: left;
+    width: 100%;
+    margin-bottom: 0;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+.input-group[class*="col-"] {
+    float: none;
+    padding-left: 0;
+    padding-right: 0;
+}
+.input-group .form-control {
+    position: relative;
+    z-index: 2;
+    float: left;
+    width: 100%;
+    margin-bottom: 0;
+}
+.input-group-addon,
+ .input-group-btn,
+ .input-group .form-control {
+     display: table-cell;
+ }
+.input-group-addon:not(:first-child):not(:last-child),
+
+.input-group-addon,
+.input-group-btn {
+    width: 1%;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+.input-group-addon {
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 1;
+    color: #555555;
+    text-align: center;
+    background-color: #eeeeee;
+    border: 1px solid #cccccc;
+    border-radius: 0px;
+}
+.glyphicon {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.glyphicon-remove:before {
+    content: "\e014";
+}
+.glyphicon-search:before {
+    content: "\e003";
+}
+
+.progress{
+    display: none;
+}
+
+#__link_bar{
+    text-align: right;
+    position:fixed;
+    width:100%;
+    z-index:999;
+    background-color: #fff;
+}
+#__link_bar a{
+    margin: 5px;
+}
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>tbody>tr>td.extra-column {
+    cursor: default !important;
+}
+.__dialog_panel_btns{
+    text-align: right;
+    margin-right: 20px;
+}
+.modal-header{
+    font-weight:bold;
+    font-size: 20px;
+}
+input[type="radio"]{
+    margin: 0px 10px !important;
+}
+.__quick_search_btn {
+    padding-bottom: 5px !important;
+}
+
+.modal-body{
+    /*overflow: hidden !important;*/
+}
+
+.table-edit>tbody>tr>th{
+    padding: 2px 5px!important;
+    line-height: 28px!important;
+}
+
+/*---附件列表样式---*/
+.__metar_attachment_list , .__metar_attachment_list_nocounter{
+    padding-left: 5px;
+    counter-reset:sectioncounter;
+    margin-bottom: 0px;
+    padding:10px 20px;
+}
+
+
+.__metar_attachment_list th, .__metar_attachment_list td{
+    border:none!important;
+    background-color:#fff;
+    padding:0!important;
+}
+
+.__metar_attachment_list_bordered{
+    border-radius: 4px;
+    border:1px solid #bbb;
+}
+
+.modal-footer{
+    background-color: #fff !important;
+    padding: 9px 15px !important;
+}
+.nav-tabs > li{
+    cursor: pointer;
+}
+
+.nav{
+    margin-bottom: 0px !important;
+}
+
+.fa{
+    height: 14px;
+    width: 14px;
+    margin-top: -5px;
+}
+
+.fa-user,.fa-remove,.fa-search{
+    margin-top: 0px !important;
+}
