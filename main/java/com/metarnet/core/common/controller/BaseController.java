@@ -85,7 +85,7 @@ public class BaseController {
             request.getSession().setAttribute("globalUniqueID", globalUniqueID);
             return userEntity;
         } catch (PaasAAAAException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            //e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
 //	Integer userId = getUserId(request);

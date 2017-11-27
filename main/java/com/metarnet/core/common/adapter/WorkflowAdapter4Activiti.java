@@ -763,6 +763,7 @@ public class WorkflowAdapter4Activiti {
         for (int i = 0; i < array.size(); i++) {
             JSONObject o = array.getJSONObject(i);
             if (o.getString("name").equals("sn")) taskInstance.setJobCode(o.getString("value"));
+            if (o.getString("name").equals("initiator")) taskInstance.setStrColumn5(o.getString("value"));
             if (o.getString("name").equals(BIZ+"jobTitle")) taskInstance.setJobTitle(o.getString("value"));
             if (o.getString("name").equals(BIZ + "jobID")) taskInstance.setJobID(o.getString("value"));
             if (o.getString("name").equals(BIZ + "jobCode")) taskInstance.setJobCode(o.getString("value"));
