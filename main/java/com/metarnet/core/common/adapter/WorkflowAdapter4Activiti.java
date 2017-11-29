@@ -42,6 +42,7 @@ public class WorkflowAdapter4Activiti {
 
     /**
      * 1.启动流程
+     *
      * @param accountId
      * @param processModelID
      * @param participant
@@ -81,6 +82,7 @@ public class WorkflowAdapter4Activiti {
 
     /**
      * 2.获取待办
+     *
      * @param taskFilter
      * @param userName
      * @return
@@ -115,15 +117,17 @@ public class WorkflowAdapter4Activiti {
             throw new AdapterException("other error", e);
         }
     }
+
     /**
      * 2.获取待办(搜索查询)
+     *
      * @param taskFilter
      * @param userName
      * @return
      * @throws AdapterException
      */
     public static Pager getWaitingTaskList(TaskFilter taskFilter, String userName,
-                                                        String createdBefore,String createdAfter) throws AdapterException {
+                                           String createdBefore, String createdAfter) throws AdapterException {
         JSONObject request = new JSONObject(), response;
 
         request.put("start", taskFilter.getPageCondition().getBegin());
@@ -146,7 +150,7 @@ public class WorkflowAdapter4Activiti {
 //            variables.add(new JSONObject().element("name", "BIZ.jobCode").element("value", taskFilter.getJobCode()));
 //        }
 //        request.put("variables", variables);
-        Pager pager=new Pager();
+        Pager pager = new Pager();
         try {
             response = restTemplate.postForObject(URI + "/query/tasks", request, JSONObject.class);
 //            return jsonArray2TaskInstance(response.getJSONArray("data"));
@@ -162,7 +166,6 @@ public class WorkflowAdapter4Activiti {
 
 
     /**
-     *
      * @param taskFilter
      * @param userName
      * @return
@@ -201,6 +204,7 @@ public class WorkflowAdapter4Activiti {
 
     /**
      * 3.根据流程ID查询待办
+     *
      * @param processInstID
      * @param accountId
      * @return
@@ -222,6 +226,7 @@ public class WorkflowAdapter4Activiti {
 
     /**
      * 4.获取已办
+     *
      * @param taskFilter
      * @param accountId
      * @return
@@ -249,7 +254,6 @@ public class WorkflowAdapter4Activiti {
     }
 
     /**
-     *
      * @param taskFilter
      * @param accountId
      * @return
@@ -279,6 +283,7 @@ public class WorkflowAdapter4Activiti {
 
     /**
      * 7.根据活动实例ID获取任务实例
+     *
      * @param accountId
      * @param activityInstID
      * @return
@@ -297,19 +302,18 @@ public class WorkflowAdapter4Activiti {
     }
 
     //更改任务领取人
-        public  static  void deleteAssignee(String taskInstId,String user)throws AdapterException{
-            JSONObject request = new JSONObject(), response;
-            try {
-                if(user==null)
-                    user="";
-                request.put("action", "delegate");
-                request.put("assignee", user);
-                restTemplate.postForObject(URI + "/runtime/tasks/" + taskInstId, request, JSONObject.class);
-            } catch (HttpStatusCodeException e) {
-                throw new AdapterException(e.getResponseBodyAsString(), e);
-            }
+    public static void deleteAssignee(String taskInstId, String user) throws AdapterException {
+        JSONObject request = new JSONObject(), response;
+        try {
+            if (user == null)
+                user = "";
+            request.put("action", "delegate");
+            request.put("assignee", user);
+            restTemplate.postForObject(URI + "/runtime/tasks/" + taskInstId, request, JSONObject.class);
+        } catch (HttpStatusCodeException e) {
+            throw new AdapterException(e.getResponseBodyAsString(), e);
         }
-
+    }
 
 
 //        //设置候选人列表
@@ -326,26 +330,27 @@ public class WorkflowAdapter4Activiti {
 
     /**
      * 13.转办
+     *
      * @param accountId
      * @param taskInstance
      * @throws AdapterException
      */
-    public static void forwardTask(String accountId, TaskInstance taskInstance,  List<Participant> participants) throws AdapterException {
+    public static void forwardTask(String accountId, TaskInstance taskInstance, List<Participant> participants) throws AdapterException {
         JSONObject request = new JSONObject(), response;
         try {
             try {
-                 restTemplate.delete(URI + "/runtime/tasks/" + taskInstance.getTaskInstID()+"/identitylinks/users/"+accountId+"/candidate");
-            }catch (Exception e){
+                restTemplate.delete(URI + "/runtime/tasks/" + taskInstance.getTaskInstID() + "/identitylinks/users/" + accountId + "/candidate");
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            for (Participant p:participants){
+            for (Participant p : participants) {
                 request.put("user", p.getParticipantID());
                 request.put("type", "candidate");
                 try {
-                    restTemplate.postForObject(URI + "/runtime/tasks/" + taskInstance.getTaskInstID()+"/identitylinks", request, JSONObject.class);
-                }catch (Exception e){
+                    restTemplate.postForObject(URI + "/runtime/tasks/" + taskInstance.getTaskInstID() + "/identitylinks", request, JSONObject.class);
+                } catch (Exception e) {
                     e.printStackTrace();
-                }finally {
+                } finally {
                     request.clear();
                 }
             }
@@ -357,6 +362,7 @@ public class WorkflowAdapter4Activiti {
 
     /**
      * 8 提交待办
+     *
      * @param accountId
      * @param taskInstance
      * @param participants
@@ -365,7 +371,7 @@ public class WorkflowAdapter4Activiti {
      * @throws AdapterException
      */
     public static void submitTask(String accountId, TaskInstance taskInstance, List<Participant> participants,
-                                  String nextStep,String tenantId) throws AdapterException {
+                                  String nextStep, String tenantId) throws AdapterException {
 
         JSONObject request = new JSONObject(), response;
 
@@ -394,8 +400,8 @@ public class WorkflowAdapter4Activiti {
         variables.add(new JSONObject().element("name", "days").element("value", 4));
 
         //记录通用处理信息
-        if(nextStep==null){
-            nextStep="";
+        if (nextStep == null) {
+            nextStep = "";
         }
         variables.add(new JSONObject().element("name", "nextStep").element("value", nextStep));
         variables.add(new JSONObject().element("name", "tenantId").element("value", tenantId));
@@ -414,13 +420,14 @@ public class WorkflowAdapter4Activiti {
 
     /**
      * 提交待办 旧版
+     *
      * @param accountId
      * @param taskInstance
      * @param participants
      * @throws AdapterException
      */
     public static void submitTask(String accountId, TaskInstance taskInstance, List<Participant> participants
-                                  ) throws AdapterException {
+    ) throws AdapterException {
         JSONObject request = new JSONObject(), response;
 
         try {
@@ -455,6 +462,7 @@ public class WorkflowAdapter4Activiti {
 
     /**
      * 9.设置相关数据
+     *
      * @param processInstID
      * @param relaDatas
      * @param accountId
@@ -494,6 +502,7 @@ public class WorkflowAdapter4Activiti {
 
     /**
      * 10.获取相关数据
+     *
      * @param processInstID
      * @param keys
      * @param accountId
@@ -521,6 +530,7 @@ public class WorkflowAdapter4Activiti {
 
     /**
      * 44.获取根流程实例
+     *
      * @param accountId
      * @param processInstanceId
      * @return
@@ -543,6 +553,7 @@ public class WorkflowAdapter4Activiti {
     /**
      * 51.	根据业务主键jobID获取当前待办参数
      * 根据业务主键查询这个工单下的当前处理人及相关参数
+     *
      * @param accountId
      * @param jobId
      * @return
@@ -553,13 +564,13 @@ public class WorkflowAdapter4Activiti {
 
         JSONObject request = new JSONObject(), response;
         //根据业务主键jobID查询历史流程实例集合
-            JSONArray jsonArray = new JSONArray();
-            jsonArray.add(new JSONObject()
-                    .element("name", "BIZ.jobID")
-                    .element("value", jobId)
-                    .element("operation", "equals")
-                    .element("type", "string"));
-            request.put("variables", jsonArray.toString());
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.add(new JSONObject()
+                .element("name", "BIZ.jobID")
+                .element("value", jobId)
+                .element("operation", "equals")
+                .element("type", "string"));
+        request.put("variables", jsonArray.toString());
         try {
             //查询历史流程实例集合
             response = restTemplate.postForObject(URI + "/query/historic-process-instances", request, JSONObject.class);
@@ -597,6 +608,7 @@ public class WorkflowAdapter4Activiti {
 
     /**
      * 52.根据业务主键获取活动
+     *
      * @param accountId
      * @param jobId
      * @return
@@ -608,7 +620,7 @@ public class WorkflowAdapter4Activiti {
         JSONObject request = new JSONObject(), response;
         JSONArray jsonArray = new JSONArray();
         try {
-            response = restTemplate.getForObject(URI + "/history/historic-task-instances?processInstanceId="+jobId, JSONObject.class);
+            response = restTemplate.getForObject(URI + "/history/historic-task-instances?processInstanceId=" + jobId, JSONObject.class);
             JSONArray jsonArrayPro = response.getJSONArray("data");
             jsonArray = new JSONArray();
             for (int i = 0; i < jsonArrayPro.size(); i++) {
@@ -633,6 +645,7 @@ public class WorkflowAdapter4Activiti {
 
     /**
      * 19.根据流程实例ID获取流程对象
+     *
      * @param accountId
      * @param processInstId
      * @return
@@ -652,6 +665,7 @@ public class WorkflowAdapter4Activiti {
 
     /**
      * 21.获取流程实例的子流程
+     *
      * @param accountId
      * @param processInstId
      * @return
@@ -679,6 +693,7 @@ public class WorkflowAdapter4Activiti {
 
     /**
      * 22.根据任务实例ID获取任务实例对象
+     *
      * @param accountId
      * @param taskInstId
      * @return
@@ -699,6 +714,7 @@ public class WorkflowAdapter4Activiti {
     /**
      * 12.获取流程实例流转过的活动
      * 若流程未结束,则数据集合的最后一个元素是当前待办
+     *
      * @param accountId
      * @param processInstID
      * @return
@@ -780,6 +796,7 @@ public class WorkflowAdapter4Activiti {
 
     /**
      * json转任务实例对象
+     *
      * @param object
      * @return
      * @throws Exception
@@ -808,7 +825,7 @@ public class WorkflowAdapter4Activiti {
             if (object.get("startTime") != null) {   //已办到达时间
                 taskInstance.setCreateDate(formatter.parse(object.getString("startTime")));
             }
-            if (object.get("endTime") != null) {   //已办操作时间
+            if (object.get("endTime") != null && !"null".equals(object.get("endTime"))) {   //已办操作时间
                 taskInstance.setCompletionDate(formatter.parse(object.getString("endTime")));
             }
         } catch (ParseException e) {
@@ -819,7 +836,7 @@ public class WorkflowAdapter4Activiti {
             JSONObject o = array.getJSONObject(i);
             if (o.getString("name").equals("sn")) taskInstance.setJobCode(o.getString("value"));
             if (o.getString("name").equals("initiator")) taskInstance.setStrColumn5(o.getString("value"));
-            if (o.getString("name").equals(BIZ+"jobTitle")) taskInstance.setJobTitle(o.getString("value"));
+            if (o.getString("name").equals(BIZ + "jobTitle")) taskInstance.setJobTitle(o.getString("value"));
             if (o.getString("name").equals(BIZ + "jobID")) taskInstance.setJobID(o.getString("value"));
             if (o.getString("name").equals(BIZ + "jobCode")) taskInstance.setJobCode(o.getString("value"));
             if (o.getString("name").equals(PROC + "datColumn1")) {
@@ -841,6 +858,7 @@ public class WorkflowAdapter4Activiti {
 
     /**
      * jsonarray转任务实例对象集合
+     *
      * @param jsonArray
      * @return
      * @throws Exception
@@ -856,6 +874,7 @@ public class WorkflowAdapter4Activiti {
 
     /**
      * json转流程实例对象
+     *
      * @param object
      * @return
      */
@@ -873,6 +892,7 @@ public class WorkflowAdapter4Activiti {
 
     /**
      * jsonarray转流程实例集合
+     *
      * @param jsonArray
      * @return
      */
@@ -894,6 +914,7 @@ public class WorkflowAdapter4Activiti {
 
     /**
      * jsonArray转活动实例集合
+     *
      * @param jsonArray
      * @return
      */
@@ -923,6 +944,7 @@ public class WorkflowAdapter4Activiti {
 
     /**
      * jsonArray转任务实例集合
+     *
      * @param jsonArray
      * @return
      */
@@ -954,6 +976,7 @@ public class WorkflowAdapter4Activiti {
 
     /**
      * jsonArray转user集合
+     *
      * @param jsonArray
      * @return
      */
