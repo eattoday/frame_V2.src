@@ -7,7 +7,6 @@ import com.metarnet.core.common.utils.Constants;
 import com.metarnet.core.common.workflow.*;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.apache.activemq.store.kahadb.disk.page.Page;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.http.ResponseEntity;
@@ -116,6 +115,50 @@ public class WorkflowAdapter4Activiti {
             throw new AdapterException("other error", e);
         }
     }
+    /**
+     * 2.获取待办(搜索查询)
+     * @param taskFilter
+     * @param userName
+     * @return
+     * @throws AdapterException
+     */
+    public static Pager getWaitingTaskList(TaskFilter taskFilter, String userName,
+                                                        String createdBefore,String createdAfter) throws AdapterException {
+        JSONObject request = new JSONObject(), response;
+
+        request.put("start", taskFilter.getPageCondition().getBegin());
+        request.put("size", taskFilter.getPageCondition().getLength());
+        request.put("order", "desc");
+        request.put("sort", "createTime");
+
+
+        if (StringUtils.isNotEmpty(userName))
+            request.put("candidateUser", userName);
+        request.put("includeProcessVariables", true);
+        request.put("processDefinitionName", taskFilter.getProcessModelName());
+        request.put("processInstanceId", taskFilter.getProcessInstID());
+//        request.put("createdBefore", createdBefore);
+//        request.put("createdAfter", createdAfter);
+
+        //根据变量分类查询
+//        JSONArray variables = new JSONArray();
+//        if(taskFilter.getJobCode()!=null&&!"".equals(taskFilter.getJobCode())){
+//            variables.add(new JSONObject().element("name", "BIZ.jobCode").element("value", taskFilter.getJobCode()));
+//        }
+//        request.put("variables", variables);
+        Pager pager=new Pager();
+        try {
+            response = restTemplate.postForObject(URI + "/query/tasks", request, JSONObject.class);
+//            return jsonArray2TaskInstance(response.getJSONArray("data"));
+            pager.setExhibitDatas(jsonArray2TaskInstance(response.getJSONArray("data")));
+            pager.setRecordCount(Integer.parseInt(response.get("total").toString()));
+            return pager;
+        } catch (HttpClientErrorException e) {
+            throw new AdapterException(e.getResponseBodyAsString(), e);
+        } catch (Exception e) {
+            throw new AdapterException("other error", e);
+        }
+    }
 
 
     /**
@@ -191,6 +234,7 @@ public class WorkflowAdapter4Activiti {
         if (StringUtils.isNotEmpty(accountId))
             request.put("taskAssignee", accountId);
         request.put("includeProcessVariables", true);
+        request.put("finished",true);
         request.put("order", "desc");
         request.put("start", taskFilter.getPageCondition().getBegin());
         request.put("size", taskFilter.getPageCondition().getLength());
@@ -252,14 +296,21 @@ public class WorkflowAdapter4Activiti {
         }
     }
 
-    //        //更新任务负责人
-//        try {
-//            request.put("action", "delegate");
-//            request.put("assignee", "");
-//            restTemplate.postForObject(URI + "/runtime/tasks/" + taskInstance.getTaskInstID(), request, JSONObject.class);
-//        } catch (HttpStatusCodeException e) {
-//            throw new AdapterException(e.getResponseBodyAsString(), e);
-//        }
+    //更改任务领取人
+        public  static  void deleteAssignee(String taskInstId,String user)throws AdapterException{
+            JSONObject request = new JSONObject(), response;
+            try {
+                if(user==null)
+                    user="";
+                request.put("action", "delegate");
+                request.put("assignee", user);
+                restTemplate.postForObject(URI + "/runtime/tasks/" + taskInstId, request, JSONObject.class);
+            } catch (HttpStatusCodeException e) {
+                throw new AdapterException(e.getResponseBodyAsString(), e);
+            }
+        }
+
+
 
 //        //设置候选人列表
 //        try {
@@ -343,6 +394,9 @@ public class WorkflowAdapter4Activiti {
         variables.add(new JSONObject().element("name", "days").element("value", 4));
 
         //记录通用处理信息
+        if(nextStep==null){
+            nextStep="";
+        }
         variables.add(new JSONObject().element("name", "nextStep").element("value", nextStep));
         variables.add(new JSONObject().element("name", "tenantId").element("value", tenantId));
 
@@ -748,6 +802,7 @@ public class WorkflowAdapter4Activiti {
             String createTime = "";
             if (object.get("createTime") != null) { //待办到达时间
                 createTime = object.getString("createTime");
+//                System.out.println(createTime);
                 taskInstance.setCreateDate(formatter.parse(createTime));
             }
             if (object.get("startTime") != null) {   //已办到达时间
