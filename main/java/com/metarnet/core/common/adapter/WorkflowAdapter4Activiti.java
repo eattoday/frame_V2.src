@@ -817,15 +817,16 @@ public class WorkflowAdapter4Activiti {
 
         try {
             String createTime = "";
-            if (object.get("createTime") != null) { //待办到达时间
+            if (object.get("createTime") != null&&!"null".equals(object.getString("createTime"))) { //待办到达时间
                 createTime = object.getString("createTime");
 //                System.out.println(createTime);
                 taskInstance.setCreateDate(formatter.parse(createTime));
             }
-            if (object.get("startTime") != null) {   //已办到达时间
+            if (object.get("startTime") != null&&!"null".equals(object.getString("startTime"))) {   //已办到达时间
                 taskInstance.setCreateDate(formatter.parse(object.getString("startTime")));
             }
-            if (object.get("endTime") != null && !"null".equals(object.get("endTime"))) {   //已办操作时间
+            if (object.get("endTime") != null && !"null".equals(object.getString("endTime"))) {   //已办操作时间
+//                System.out.println("4activiti已办时间:"+object.get("endTime"));
                 taskInstance.setCompletionDate(formatter.parse(object.getString("endTime")));
             }
         } catch (ParseException e) {
