@@ -234,7 +234,7 @@ public class WorkflowAdapter4Activiti {
         if (StringUtils.isNotEmpty(accountId))
             request.put("taskAssignee", accountId);
         request.put("includeProcessVariables", true);
-        request.put("finished",true);
+//        request.put("finished",true);
         request.put("order", "desc");
         request.put("start", taskFilter.getPageCondition().getBegin());
         request.put("size", taskFilter.getPageCondition().getLength());
