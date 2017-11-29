@@ -466,4 +466,61 @@ public class TaskInstance {
     public void setJobtype(String jobtype) {
         this.jobtype = jobtype;
     }
+
+
+    @Override
+    public String toString() {
+        return "TaskInstance{" +
+                "taskInstID='" + taskInstID + '\'' +
+                ", parentTaskInstID='" + parentTaskInstID + '\'' +
+                ", processModelId='" + processModelId + '\'' +
+                ", ProcessModelName='" + ProcessModelName + '\'' +
+                ", processModelCNName='" + processModelCNName + '\'' +
+                ", ProcessModelDes='" + ProcessModelDes + '\'' +
+                ", processInstID='" + processInstID + '\'' +
+                ", activityInstID='" + activityInstID + '\'' +
+                ", activityDefID='" + activityDefID + '\'' +
+                ", activityInstName='" + activityInstName + '\'' +
+                ", appID='" + appID + '\'' +
+                ", formURL='" + formURL + '\'' +
+                ", jobTitle='" + jobTitle + '\'' +
+                ", jobID='" + jobID + '\'' +
+                ", senderType='" + senderType + '\'' +
+                ", senderID='" + senderID + '\'' +
+                ", endDate=" + endDate +
+                ", completionDate=" + completionDate +
+                ", createDate=" + createDate +
+                ", warningDate=" + warningDate +
+                ", currentState='" + currentState + '\'' +
+                ", shard='" + shard + '\'' +
+                ", businessId='" + businessId + '\'' +
+                ", PRODUCT_ID='" + PRODUCT_ID + '\'' +
+                ", MAJOR_ID='" + MAJOR_ID + '\'' +
+                ", rootProcessInstId='" + rootProcessInstId + '\'' +
+                ", participants=" + participants +
+                ", fileds=" + fileds +
+                ", jobStarttime=" + jobStarttime +
+                ", jobEndtime=" + jobEndtime +
+                ", reBacktime=" + reBacktime +
+                ", jobCode='" + jobCode + '\'' +
+                ", TaskWarning='" + TaskWarning + '\'' +
+                ", ReceiverID='" + ReceiverID + '\'' +
+                ", rootvcColumn1='" + rootvcColumn1 + '\'' +
+                ", rootvcColumn2='" + rootvcColumn2 + '\'' +
+                ", rootnmColumn1=" + rootnmColumn1 +
+                ", rootnmColumn2=" + rootnmColumn2 +
+                ", strColumn1='" + strColumn1 + '\'' +
+                ", strColumn2='" + strColumn2 + '\'' +
+                ", strColumn3='" + strColumn3 + '\'' +
+                ", strColumn4='" + strColumn4 + '\'' +
+                ", strColumn5='" + strColumn5 + '\'' +
+                ", strColumn6='" + strColumn6 + '\'' +
+                ", strColumn7='" + strColumn7 + '\'' +
+                ", datColumn1=" + datColumn1 +
+                ", datColumn2=" + datColumn2 +
+                ", numColumn1=" + numColumn1 +
+                ", numColumn2=" + numColumn2 +
+                ", jobtype='" + jobtype + '\'' +
+                '}';
+    }
 }
