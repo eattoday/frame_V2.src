@@ -39,26 +39,26 @@
                     outFetterTable.__total_count_label = $('<span class="float-left total-count-label">共<span id="__total_count_value' + outFetterTable.__settings.renderTo + '" style="font-weight: bold">0</span>条</span>');
 
                     //快速检索
-                    //outFetterTable.__quick_search = $('<div class="float-left quick-search-container"><img src="'+_PATH+'/base/_resources/search.png"/></div>');
-                    //outFetterTable.__quick_search_input = $('<input class="__quick_search_input" placeholder="快速检索"/>');
-                    //outFetterTable.__quick_search.append(outFetterTable.__quick_search_input);
-                    //outFetterTable.__quick_search_btn = $('<div class="float-left btn btn-default __quick_search_btn">搜索</div>');
-                    //outFetterTable.__quick_search_btn.click(function(){
-                    //    outFetterTable.refresh();
-                    //});
-                    //outFetterTable.__quick_search_input.bind('keyup', function(event) {
-                    //    if (event.keyCode == "13") {
-                    //        //回车执行查询
-                    //        outFetterTable.refresh();
-                    //    }
-                    //});
+                    outFetterTable.__quick_search = $('<div class="float-left quick-search-container"><img src="'+_PATH+'/base/_resources/search.png"/></div>');
+                    outFetterTable.__quick_search_input = $('<input class="__quick_search_input" placeholder="快速检索"/>');
+                    outFetterTable.__quick_search.append(outFetterTable.__quick_search_input);
+                    outFetterTable.__quick_search_btn = $('<div class="float-left btn btn-default __quick_search_btn">搜索</div>');
+                    outFetterTable.__quick_search_btn.click(function(){
+                       outFetterTable.refresh();
+                    });
+                    outFetterTable.__quick_search_input.bind('keyup', function(event) {
+                       if (event.keyCode == "13") {
+                           //回车执行查询
+                           outFetterTable.refresh();
+                       }
+                    });
 
                     //高级查询
-                    //outFetterTable.__detail_search_btn = $('<span class="btn btn-default float-right btn-high-query">高级查询<img src="'+_PATH+'/base/_resources/h-query.png"/></span>');
-                    //outFetterTable.__detail_search_btn = $('<span class="btn btn-default float-right btn-high-query">高级查询</span>');
-                    //outFetterTable.__detail_search_btn.click(function(){
-                    //    outFetterTable.showHighQueryDialog();
-                    //});
+                    outFetterTable.__detail_search_btn = $('<span class="btn btn-default float-right btn-high-query">高级查询<img src="'+_PATH+'/base/_resources/h-query.png"/></span>');
+                    outFetterTable.__detail_search_btn = $('<span class="btn btn-default float-right btn-high-query">高级查询</span>');
+                    outFetterTable.__detail_search_btn.click(function(){
+                       outFetterTable.showHighQueryDialog();
+                    });
 
                     //数据表头
                     outFetterTable.__data_title_table = $('<table  class="out-fetter-header-table" style="margin-top: 5px;"></table>');
