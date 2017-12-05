@@ -219,6 +219,16 @@ public interface IWorkflowBaseService {
      */
     public List<GeneralInfoModel> getGeneralInfoByRootProcessId(String rootProcessId) throws ServiceException;
 
+
+    /**
+     * 根据创建人查询通用信息
+     * @param createdBy
+     * @return
+     * @throws ServiceException
+     */
+    public List<GeneralInfoModel> getGeneralInfoByCreatedBy(Long createdBy) throws ServiceException;
+
+
     /**
      * 获得根流程下所有当前处理环节信息，处理人信息,与工单日志公用一个model
      *

@@ -532,6 +532,16 @@ public class WorkflowBaseServiceImpl implements IWorkflowBaseService {
         return null;
     }
 
+    @Override
+    public List<GeneralInfoModel> getGeneralInfoByCreatedBy(Long createdBy) throws ServiceException {
+        try {
+            return baseDAO.find("from GeneralInfoModel where createdBy = ? order by objectId asc", new Object[]{createdBy});
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     /**
      * 获得根流程下所有当前处理环节信息，处理人信息 与工单日志公用一个model
@@ -998,7 +1008,7 @@ public class WorkflowBaseServiceImpl implements IWorkflowBaseService {
         baseForm.setRootProInstId(taskInstance.getRootProcessInstId());
         baseForm.setActivityInstName(taskInstance.getActivityInstName());
 
-        setBelongInfo(baseForm, userEntity);
+//        setBelongInfo(baseForm, userEntity);
     }
 
     @Override
@@ -1268,7 +1278,8 @@ public class WorkflowBaseServiceImpl implements IWorkflowBaseService {
         setGeneralInfo(generalInfoModel, taskInstance, userEntity);
         try {
             Map rela = WorkflowAdapter.getRelativeData(taskInstance.getProcessInstID(), Arrays.asList(Constants.ROOT_PROCESS_INST_ID), userEntity.getUserName());
-            generalInfoModel.setRootProInstId(rela.get(Constants.ROOT_PROCESS_INST_ID).toString());
+//            generalInfoModel.setRootProInstId(rela.get(Constants.ROOT_PROCESS_INST_ID).toString());
+            generalInfoModel.setRootProInstId(taskInstance.getProcessInstID());
         } catch (AdapterException e) {
             e.printStackTrace();
         }
