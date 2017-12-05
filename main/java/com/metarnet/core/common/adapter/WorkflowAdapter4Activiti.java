@@ -1,5 +1,6 @@
 package com.metarnet.core.common.adapter;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.util.TypeUtils;
 import com.metarnet.core.common.exception.AdapterException;
 import com.metarnet.core.common.model.Pager;
@@ -111,6 +112,36 @@ public class WorkflowAdapter4Activiti {
         try {
             response = restTemplate.postForObject(URI + "/query/tasks", request, JSONObject.class);
             return jsonArray2TaskInstance(response.getJSONArray("data"));
+        } catch (HttpClientErrorException e) {
+            throw new AdapterException(e.getResponseBodyAsString(), e);
+        } catch (Exception e) {
+            throw new AdapterException("other error", e);
+        }
+    }
+    /**
+     * 2.获取所有候选人
+     * @return
+     * @throws AdapterException
+     */
+    public static List<String> getCandidates(String taskInstanceId) throws AdapterException {
+
+        JSONObject request = new JSONObject(), response;
+
+        try {
+            String result = restTemplate.getForObject(URI + "/runtime/tasks/" + taskInstanceId+"/identitylinks", String.class);
+//            ResponseEntity<String> forEntity = restTemplate.getForEntity("http://10.225.222.201:8090/activiti-rest/runtime/tasks/46608/identitylinks", String.class);
+            com.alibaba.fastjson.JSONArray jsonArray = JSON.parseArray(result);
+            Set<String> candidateSet=new LinkedHashSet<>();
+//            JSONArray jsonArray=response.getJSONArray("data");
+            for(int i=0;i<jsonArray.size();i++){
+                com.alibaba.fastjson.JSONObject jsonObject=jsonArray.getJSONObject(i);
+                if("candidate".equals(jsonObject.getString("type"))){
+                    candidateSet.add(jsonObject.getString("user"));
+                }
+            }
+            List<String> candidateList=new ArrayList<>();
+            candidateList.addAll(candidateSet);
+            return candidateList;
         } catch (HttpClientErrorException e) {
             throw new AdapterException(e.getResponseBodyAsString(), e);
         } catch (Exception e) {
@@ -398,14 +429,11 @@ public class WorkflowAdapter4Activiti {
         //通过setRelativeData()设置
         variables.add(new JSONObject().element("name", "approved").element("value", true));
         variables.add(new JSONObject().element("name", "days").element("value", 4));
-
         //记录通用处理信息
-        if (nextStep == null) {
+        if (nextStep == null)
             nextStep = "";
-        }
         variables.add(new JSONObject().element("name", "nextStep").element("value", nextStep));
         variables.add(new JSONObject().element("name", "tenantId").element("value", tenantId));
-
 
         //向rest发送请求的参数
         request.put("action", "complete");
@@ -415,6 +443,7 @@ public class WorkflowAdapter4Activiti {
         } catch (HttpStatusCodeException e) {
             throw new AdapterException(e.getResponseBodyAsString(), e);
         }
+
         logger.info("===完成任务===");
     }
 
@@ -704,6 +733,30 @@ public class WorkflowAdapter4Activiti {
         try {
             response = restTemplate.getForObject(URI + "/runtime/tasks/" + taskInstId, JSONObject.class);
             return jsonObject2TaskInstance(response);
+        } catch (HttpClientErrorException e) {
+            throw new AdapterException(e.getResponseBodyAsString(), e);
+        } catch (Exception e) {
+            throw new AdapterException("other error", e);
+        }
+    }
+    /**
+     * 22.根据任务实例ID获取 历史 任务实例对象
+     *
+     * @param accountId
+     * @param taskInstId
+     * @return
+     * @throws AdapterException
+     */
+    public static TaskInstance getHistoryTaskInstanceObject(String accountId, String taskInstId) throws AdapterException {
+        JSONObject response = new JSONObject();
+        JSONObject object=new JSONObject();
+        try {
+            response = restTemplate.getForObject(URI + "/history/historic-task-instances?taskId=" + taskInstId, JSONObject.class);
+            JSONArray jsonArray = response.getJSONArray("data");
+            if (jsonArray.size()!=0) {
+                object = jsonArray.getJSONObject(0);
+            }
+            return jsonObject2TaskInstance(object);
         } catch (HttpClientErrorException e) {
             throw new AdapterException(e.getResponseBodyAsString(), e);
         } catch (Exception e) {
