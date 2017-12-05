@@ -40,7 +40,7 @@
 
                     //快速检索
                     outFetterTable.__quick_search = $('<div class="float-left quick-search-container"><img src="'+_PATH+'/base/_resources/search.png"/></div>');
-                    outFetterTable.__quick_search_input = $('<input class="__quick_search_input" placeholder="快速检索"/>');
+                    outFetterTable.__quick_search_input = $('<input id="__quick_search_input" class="__quick_search_input" placeholder="快速检索"/>');
                     outFetterTable.__quick_search.append(outFetterTable.__quick_search_input);
                     outFetterTable.__quick_search_btn = $('<div class="float-left btn btn-default __quick_search_btn">搜索</div>');
                     outFetterTable.__quick_search_btn.click(function(){
@@ -132,13 +132,18 @@
                             outFetterTable.dtGridPager.highQueryParameters[highQueryItems[h].id] = highQueryItems[h].value;
                         }
                         outFetterTable.dtGridPager.fastQueryKeyWord = '';
-                    } else {
-                        //outFetterTable.dtGridPager.fastQueryKeyWord = outFetterTable.__quick_search_input.val();
+                    }else if(outFetterTable.__highQueryDialogPanel){
+                        var highQueryItems = outFetterTable.__highQueryDialogPanel.find('input');
+                        for(var h = 0 ; h < highQueryItems.length ; h++){
+                            outFetterTable.dtGridPager.highQueryParameters[highQueryItems[h].id] = highQueryItems[h].value;
+                        }
+                        outFetterTable.dtGridPager.fastQueryKeyWord = '';
+                        // outFetterTable.dtGridPager.fastQueryKeyWord = outFetterTable.__quick_search_input.val();
+                    }else {
+                        outFetterTable.dtGridPager.fastQueryKeyWord = outFetterTable.__quick_search_input.val();
                         outFetterTable.dtGridPager.highQueryParameters = {};
+                        // outFetterTable.dtGridPager.highQueryParameters[lk_processModelName] = 'aaaa';
                     }
-
-
-
 
                     $.ajax({
                         url: outFetterTable.__settings.loadURL,
@@ -251,7 +256,7 @@
                             //alert(__data_column.title + ',' + __data_column.highQuery);
                             if(__data_column.highQuery){
                                 var __row = $('<div class="form-group"></div>');
-                                var __label = $('<label class="col-sm-3 control-label text-right">'+__data_column.title+'：</label>');
+                                var __label = $('<label <!--class="col-sm-3 control-label text-right"-->'+__data_column.title+'：</label>');
                                 __row.append(__label);
                                 if(__data_column.highQueryType == 'range'){
                                     var __le = $('<div class="col-sm-4"><div class=" input-group"><input id="le_' + __data_column.column + '" class="form-control" placeholder="请输入开始'+__data_column.title+'" onclick="WdatePicker({dateFmt: \'yyyy-MM-dd HH:mm:ss\'})"/><div class="input-group-addon"><i class="fa fa-calendar"></i></div></div></div>');
