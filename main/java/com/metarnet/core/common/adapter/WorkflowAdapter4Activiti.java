@@ -433,6 +433,8 @@ public class WorkflowAdapter4Activiti {
         if (nextStep == null)
             nextStep = "";
         variables.add(new JSONObject().element("name", "nextStep").element("value", nextStep));
+        if(tenantId==null||"".equals(tenantId))
+            tenantId="default";
         variables.add(new JSONObject().element("name", "tenantId").element("value", tenantId));
 
         //向rest发送请求的参数
