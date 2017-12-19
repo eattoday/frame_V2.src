@@ -734,7 +734,22 @@ public class WorkflowAdapter4Activiti {
         JSONObject response = new JSONObject();
         try {
             response = restTemplate.getForObject(URI + "/runtime/tasks/" + taskInstId, JSONObject.class);
-            return jsonObject2TaskInstance(response);
+            TaskInstance taskInstance = jsonObject2TaskInstance(response);
+            //获取任务实例的业务变量
+            String variables = restTemplate.getForObject(URI + "/runtime/tasks/" + taskInstId+"/variables", String.class);
+            JSONArray jsonArray = JSONArray.fromObject(variables);
+            for (int i=0;i<jsonArray.size();i++){
+                JSONObject o = jsonArray.getJSONObject(i);
+                if (o.getString("name").equals("initiator"))
+                    taskInstance.setStrColumn5(o.getString("value"));
+                if (o.getString("name").equals(BIZ + "jobTitle"))
+                    taskInstance.setJobTitle(o.getString("value"));
+                if (o.getString("name").equals(BIZ + "jobID"))
+                    taskInstance.setJobID(o.getString("value"));
+                if (o.getString("name").equals(BIZ + "jobCode"))
+                    taskInstance.setJobCode(o.getString("value"));
+            }
+            return taskInstance;
         } catch (HttpClientErrorException e) {
             throw new AdapterException(e.getResponseBodyAsString(), e);
         } catch (Exception e) {
