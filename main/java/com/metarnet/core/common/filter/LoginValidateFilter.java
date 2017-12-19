@@ -37,7 +37,10 @@ public class LoginValidateFilter implements Filter {
                 "flowNodeSettingSyncController.do" , "getNodeSetting.do" , "getMyCompletedTasks.do" ,
                 "updateBusiInfoByRoot" , "addLog.do" ,"flowButtonList.jsp","*.jsp","flowButtonQuery.do",
                 "findNodesByDiagram.do","demoTaskSubmit.jsp","flowNodeSettingController.do","demoCompleteTask.jsp",
-                "workFlowController.do","demoWorkflow.jsp","demoTask.jsp","demoController.do","demoForm.jsp"};
+                "workFlowController.do","demoWorkflow.jsp","demoTask.jsp","demoController.do","demoForm.jsp",
+                "frame_proxy.jsp","frame_son.jsp"
+
+        };
         String[] notFilterMethod = new String[]{ };
         // 请求的url
         String url = request.getRequestURI();

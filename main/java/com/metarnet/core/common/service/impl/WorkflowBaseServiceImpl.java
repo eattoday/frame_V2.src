@@ -986,27 +986,29 @@ public class WorkflowBaseServiceImpl implements IWorkflowBaseService {
     public void setGeneralInfo(BaseForm baseForm, TaskInstance taskInstance, UserEntity userEntity) throws ServiceException {
         ProcessInstance processInstance = null;
         try {
+            //在activiti-rest获取流程实例对象
             processInstance = WorkflowAdapter.getProcessInstance(userEntity.getUserName(), taskInstance.getProcessInstID());
         } catch (AdapterException e) {
             e.printStackTrace();
         }
 
         try {
+            //通过任务实例对象获取 createDate 赋值给 taskStartTime
             baseForm.setTaskStartTime(new Timestamp(taskInstance.getCreateDate().getTime()));
         } catch (Exception e) {
 
         }
-        baseForm.setOperUserId(userEntity.getUserId());
-        baseForm.setOperUserTrueName(userEntity.getTrueName());
-        baseForm.setOperOrgId(userEntity.getOrgID());
-        baseForm.setOperOrgName(userEntity.getOrgEntity().getOrgName());
-        baseForm.setOperFullOrgName(userEntity.getOrgEntity().getFullOrgName());
-        baseForm.setOperTime(new Timestamp(new Date().getTime()));
-        baseForm.setTaskInstId(taskInstance.getTaskInstID());
-        baseForm.setProcessInstId(taskInstance.getProcessInstID());
-        baseForm.setParentProInstId(processInstance.getParentProcessInstID());
-        baseForm.setRootProInstId(taskInstance.getRootProcessInstId());
-        baseForm.setActivityInstName(taskInstance.getActivityInstName());
+        baseForm.setOperUserId(userEntity.getUserId());//userId -> operUserId
+        baseForm.setOperUserTrueName(userEntity.getTrueName());//trueName
+        baseForm.setOperOrgId(userEntity.getOrgID());//orgId
+        baseForm.setOperOrgName(userEntity.getOrgEntity().getOrgName());//orgName
+        baseForm.setOperFullOrgName(userEntity.getOrgEntity().getFullOrgName());//fullOrgName
+        baseForm.setOperTime(new Timestamp(new Date().getTime()));//当前时间->operTime
+        baseForm.setTaskInstId(taskInstance.getTaskInstID());//任务id
+        baseForm.setProcessInstId(taskInstance.getProcessInstID());//流程id
+        baseForm.setParentProInstId(processInstance.getParentProcessInstID());//父流程id
+        baseForm.setRootProInstId(taskInstance.getRootProcessInstId());//根流程id
+        baseForm.setActivityInstName(taskInstance.getActivityInstName());//环节实例名称
 
 //        setBelongInfo(baseForm, userEntity);
     }
@@ -1273,8 +1275,17 @@ public class WorkflowBaseServiceImpl implements IWorkflowBaseService {
         saveGeneralInfo(generalInfoModel, taskInstance, userEntity, "");
     }
 
+    /**
+     * 存储通用处理信息
+     * @param generalInfoModel
+     * @param taskInstance
+     * @param userEntity
+     * @param nextCandidateUserNames
+     * @throws ServiceException
+     */
     @Override
     public void saveGeneralInfo(GeneralInfoModel generalInfoModel, TaskInstance taskInstance, UserEntity userEntity, String nextCandidateUserNames) throws ServiceException {
+        //存储用户和任务信息
         setGeneralInfo(generalInfoModel, taskInstance, userEntity);
         try {
             Map rela = WorkflowAdapter.getRelativeData(taskInstance.getProcessInstID(), Arrays.asList(Constants.ROOT_PROCESS_INST_ID), userEntity.getUserName());
@@ -1283,9 +1294,10 @@ public class WorkflowBaseServiceImpl implements IWorkflowBaseService {
         } catch (AdapterException e) {
             e.printStackTrace();
         }
-        generalInfoModel.setProcessInstId(taskInstance.getProcessInstID());
-        generalInfoModel.setTaskInstId(taskInstance.getTaskInstID());
-        generalInfoModel.setActivityInstName(taskInstance.getActivityInstName());
+        generalInfoModel.setProcessInstId(taskInstance.getProcessInstID());//流程实例id
+        generalInfoModel.setTaskInstId(taskInstance.getTaskInstID());//任务实例id
+        generalInfoModel.setActivityInstName(taskInstance.getActivityInstName());//环节实例名称
+//        generalInfoModel.setLastUpdateTime(new Timestamp(new Date().getTime()));//最近更新时间
 //        String nextCandidateUserNames = "";
 //        if (nextCandidateUsers != null && !"".equals(nextCandidateUsers)) {
 //            for (int i = 0; i < nextCandidateUsers.split(",").length; i++) {
@@ -1299,7 +1311,7 @@ public class WorkflowBaseServiceImpl implements IWorkflowBaseService {
 //            if (nextCandidateUserNames.length() > 0)
 //                nextCandidateUserNames = nextCandidateUserNames.substring(0, nextCandidateUserNames.length() - 1);
 //        }
-        generalInfoModel.setNextCandidateUsers(nextCandidateUserNames);
+        generalInfoModel.setNextCandidateUsers(nextCandidateUserNames);//下一步候选人
         List generalList = getGeneraInfoList(taskInstance.getTaskInstID());
         if (generalList != null && generalList.size() > 0) {
             generalInfoModel.setObjectId(((GeneralInfoModel) generalList.get(0)).getObjectId());
