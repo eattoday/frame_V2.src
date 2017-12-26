@@ -688,7 +688,7 @@ public class HibernateBeanUtils {
         list.add(entity);
         try {
             HibernateBeanUtils.setId(entity, userEntity);
-//            HibernateBeanUtils.setCreatedInfo(entity, userEntity);
+            HibernateBeanUtils.setCreatedInfo(entity, userEntity);
             HibernateBeanUtils.setLastUpdateInfo(entity, userEntity.getUserId());
             HibernateBeanUtils.setDeletedFlag(entity, false);
             initNotNullDefaultValue(entity);
