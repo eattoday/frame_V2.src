@@ -38,7 +38,7 @@ public class LoginValidateFilter implements Filter {
                 "updateBusiInfoByRoot" , "addLog.do" ,"flowButtonList.jsp","*.jsp","flowButtonQuery.do",
                 "findNodesByDiagram.do","demoTaskSubmit.jsp","flowNodeSettingController.do","demoCompleteTask.jsp",
                 "workFlowController.do","demoWorkflow.jsp","demoTask.jsp","demoController.do","demoForm.jsp",
-                "frame_proxy.jsp","frame_son.jsp"
+                "frame_proxy.jsp","frame_son.jsp","flowButtonFindById.do"
 
         };
         String[] notFilterMethod = new String[]{ };
